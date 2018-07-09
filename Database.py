@@ -1,15 +1,17 @@
-import MySQLdb
+# import MySQLdb
+import mysql.connector
 
 
 class Database:
 
     host = 'localhost'
-    user = 'aji2'
-    password = '1234567!'
-    db = 'demotrx'
+    user = 'sim'
+    password = 'sim123'
+    db = 'simsilsilah'
 
     def __init__(self):
-        self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
+        # self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
+        self.connection = mysql.connector.connect(self.host, self.user, self.password, self.db)
         self.cursor = self.connection.cursor()
 
     def insert(self, query):
@@ -20,17 +22,20 @@ class Database:
             self.connection.rollback()
 
     def query(self, query):
-        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        # cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor = self.connection.cursor(mysql.connector.cursors.DictCursor)
         cursor.execute(query)
         return cursor.fetchall()
 
     def getall(self, query):
-        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        # cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor = self.connection.cursor(mysql.connector.cursors.DictCursor)
         cursor.execute(query)
         return cursor.fetchall()
 
     def getone(self, query):
-        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        # cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor = self.connection.cursor(mysql.connector.cursors.DictCursor)
         cursor.execute(query)
         return cursor.fetchone()
 

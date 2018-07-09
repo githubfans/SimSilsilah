@@ -1,5 +1,6 @@
-import sys
 import random
+from datetime import datetime
+from datetime import timedelta
 
 
 def genword(minchars=3, maxchars=5, istitle=0):
@@ -8,13 +9,14 @@ def genword(minchars=3, maxchars=5, istitle=0):
     group = []
     numchar = random.randint(minchars, maxchars)
     for i in range(numchar):
-        rnd = random.randint(0,1)
+        rnd = random.randint(0, 1)
         if rnd is 0:
-            full_name = random.choice(vocal)+random.choice(conso)
+            full_name = random.choice(vocal) + random.choice(conso)
         if rnd is 1:
-            full_name = random.choice(conso)+random.choice(vocal)
+            full_name = random.choice(conso) + random.choice(vocal)
         group.append(full_name)
-    #assuming he wants at least some kind of seperator between the names.
+
+    # assuming he wants at least some kind of seperator between the names.
     group_string = "".join(group)
     if istitle is 1:
         return group_string.title()
@@ -22,41 +24,51 @@ def genword(minchars=3, maxchars=5, istitle=0):
         return group_string
 
 
-def genname(minwords = 2,maxwords = 3,minchars = 3,maxchars = 5,istitle = 1):
+def genname(minwords=2, maxwords=3, minchars=3, maxchars=5, istitle=1):
     import random
-    numword = random.randint(minwords,maxwords)
+    numword = random.randint(minwords, maxwords)
     group = []
     for i in range(numword):
-        dword = genword(minchars,maxchars,istitle)
+        dword = genword(minchars, maxchars, istitle)
         group.append(dword)
     return " ".join(group)
 
 
-def gendesc(minitem = 3, maxitem = 100, minwords = 5, maxwords = 10, minchars = 3, maxchars = 7, istitle = 0):
+def gendesc(minitem=3, maxitem=100, minwords=5, maxwords=10, minchars=3, maxchars=7, istitle=0):
     import random
-    numitem = random.randint(minitem,maxitem)
+    numitem = random.randint(minitem, maxitem)
     group = []
     for i in range(numitem):
-        ditem = genname(minwords,maxwords,minchars,maxchars, istitle)
+        ditem = genname(minwords, maxwords, minchars, maxchars, istitle)
         group.append(ditem)
-    return ". ".join(group)+"."
+    return ". ".join(group) + "."
+
 
 def GetConfig(str):
-    f = open("config.cnf","r")
+    f = open("config.cnf", "r")
     config = f.read()
     f.close()
     getx = config.strip().split('{0} = ' . format(str))[1]
-        return int(getx.strip().split(';')[0])
+    return int(getx.strip().split(';')[0])
+
 
 def GetLive():
-    f = open("live.cnf","r")
+    f = open("live.cnf", "r")
     live = f.read()
+    if live is None:
+        live = '2000-01-01 00:00:01'
     f.close()
+    print(live)
     return live
 
+
 def SetLive():
-	oldlive = GetLive()
-    newlive = GetLive() + 1
-    f = open("live.cnf","w")
-    live = f.write(newlive)
+    getLive = GetLive()
+    print(getLive)
+    # newlive = getLive + timedelta(days=1)
+    newlive = datetime.strptime(getLive, "%Y-%m-%d %H:%M:%S")
+    newlive = newlive + timedelta(seconds=1)
+    print(newlive)
+    f = open("live.cnf", "w+")
+    live = f.write(str(newlive))
     f.close()

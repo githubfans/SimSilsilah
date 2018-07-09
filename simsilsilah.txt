@@ -9,8 +9,9 @@ CREATE TABLE human (
     email VARCHAR(30) NOT NULL,
     dateadd datetime,
     dateborn datetime,
-    agedied TINYINT(3),
-    agecoupled TINYINT(3),
-    agemenopause TINYINT(3),
+    datecoupled datetime,
+    datepregnant datetime,
+    datedied datetime,
+    datemenopause datetime,
     in_use VARCHAR(40) NOT NULL DEFAULT ''
 );

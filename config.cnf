@@ -1,4 +1,6 @@
 starttimestamp=-62167244832;
 agecoupled=20,40;
 agedied=1,200;
+pregnant=7,3650; ... days after coupled 
+givingbirth=230,252 ... days after pregnant
 agemenopause=55;
