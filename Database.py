@@ -1,5 +1,5 @@
-# import MySQLdb
-import mysql.connector
+import MySQLdb
+# import mysql.connector
 
 
 class Database:
@@ -10,8 +10,8 @@ class Database:
     db = 'simsilsilah'
 
     def __init__(self):
-        # self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
-        self.connection = mysql.connector.connect(self.host, self.user, self.password, self.db)
+        self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
+        # self.connection = mysql.connector.connect(self.host, self.user, self.password, self.db)
         self.cursor = self.connection.cursor()
 
     def insert(self, query):
@@ -22,22 +22,33 @@ class Database:
             self.connection.rollback()
 
     def query(self, query):
-        # cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor = self.connection.cursor(mysql.connector.cursors.DictCursor)
+        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query)
         return cursor.fetchall()
 
     def getall(self, query):
-        # cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor = self.connection.cursor(mysql.connector.cursors.DictCursor)
+        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query)
         return cursor.fetchall()
 
     def getone(self, query):
-        # cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor = self.connection.cursor(mysql.connector.cursors.DictCursor)
+        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query)
-        return cursor.fetchone()
+        row = cursor.fetchall()
+        x = 0
+        c = None
+        for r in row:
+            x += 1
+            c = r
+            if x is 1:
+                break
+        if c is not None:
+            return c
+
+    def count(self, query):
+        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(query)
+        return cursor.rowcount
 
     def __del__(self):
         self.connection.close()

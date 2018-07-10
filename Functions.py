@@ -1,4 +1,5 @@
 import random
+import re
 from datetime import datetime
 from datetime import timedelta
 
@@ -48,27 +49,30 @@ def GetConfig(str):
     f = open("config.cnf", "r")
     config = f.read()
     f.close()
-    getx = config.strip().split('{0} = ' . format(str))[1]
-    return int(getx.strip().split(';')[0])
+    getx = config.strip().split('{0}=' . format(str))[1]
+    getx2 = getx.strip().split(';')[0]
+    # print('getx2 = {0}' . format(getx2))
+    cari_koma = re.search(',', getx2)
+    if cari_koma is not None:
+		return getx2
+    else:
+		return int(getx2)
 
 
 def GetLive():
     f = open("live.cnf", "r")
     live = f.read()
-    if live is None:
+    if len(live) < 1:
         live = '2000-01-01 00:00:01'
     f.close()
-    print(live)
+    # print(live)
     return live
 
 
 def SetLive():
     getLive = GetLive()
-    print(getLive)
-    # newlive = getLive + timedelta(days=1)
     newlive = datetime.strptime(getLive, "%Y-%m-%d %H:%M:%S")
-    newlive = newlive + timedelta(seconds=1)
-    print(newlive)
+    newlive = newlive + timedelta(seconds=3600*50)
     f = open("live.cnf", "w+")
     live = f.write(str(newlive))
     f.close()
