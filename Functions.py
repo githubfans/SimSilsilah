@@ -72,7 +72,8 @@ def GetLive():
 def SetLive():
     getLive = GetLive()
     newlive = datetime.strptime(getLive, "%Y-%m-%d %H:%M:%S")
-    newlive = newlive + timedelta(seconds=3600*50)
+    newlive = newlive + timedelta(seconds=random.randint(3600 * 24, (3600 * 120)))
+    newlive = newlive + timedelta(seconds=random.randint(1, 3600))
     f = open("live.cnf", "w+")
     live = f.write(str(newlive))
     f.close()
