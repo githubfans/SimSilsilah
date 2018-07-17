@@ -2,8 +2,6 @@ import random
 import re
 from datetime import datetime
 from datetime import timedelta
-# import Cookie
-# C = Cookie.SimpleCookie()
 
 
 def genword(minchars=3, maxchars=5, istitle=0):
@@ -31,7 +29,10 @@ def genname(minwords=2, maxwords=3, minchars=3, maxchars=5, istitle=1):
     group = []
     for i in range(numword):
         dword = genword(minchars, maxchars, istitle)
-        group.append(dword)
+        if group[1] is not None:
+            if group[1] == group[0]:
+                dword = genword(minchars, maxchars, istitle)
+		group.append(dword)
     return " ".join(group)
 
 
@@ -60,27 +61,19 @@ def GetConfig(str):
 
 
 def GetLive():
-    # print(C['live'])
     f = open("live.cnf", "r")
     live = f.read()
     if len(live) < 1:
-        live = '1000-01-01 00:00:00'
+        live = '2000-01-01 00:00:01'
     f.close()
-    # C['live'] = live
+    # print(live)
     return live
 
 
 def SetLive():
     getLive = GetLive()
-    # getLive = str(getLive['live'])
-    # getLive = getLive.strip().split('live="')[1]
-    # getLive = getLive.strip().split('"')[0]
-    # print(getLive['live'])
-
     newlive = datetime.strptime(getLive, "%Y-%m-%d %H:%M:%S")
-    min_r = GetConfig('simulation_mintimeadd')
-    max_r = GetConfig('simulation_maxtimeadd')
-    newlive = newlive + timedelta(seconds=random.randint(min_r, max_r))
+    newlive = newlive + timedelta(seconds=random.randint(3600 * 24, (3600 * (24 * 10))))
     newlive = newlive + timedelta(seconds=random.randint(1, 3600))
     f = open("live.cnf", "w+")
     f.write(str(newlive))
