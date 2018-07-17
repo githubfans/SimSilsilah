@@ -5,6 +5,7 @@ import sys
 import random
 import time
 import re
+import os
 from datetime import datetime, timedelta
 
 
@@ -20,9 +21,12 @@ try:
         if numhuman <= maxnumhuman:
             # getLive = GetLive()
             SetLive()
-            time.sleep(.5)
             print('live....')
+            time.sleep(.5)
+            os.system('clear')
         else:
             print('sleep....')
+            time.sleep(.4)
+            os.system('clear')
 except KeyboardInterrupt:
     pass # do cleanup here

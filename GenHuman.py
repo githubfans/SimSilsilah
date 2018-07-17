@@ -5,6 +5,7 @@ import sys
 import random
 import time
 import re
+import os
 from datetime import datetime, timedelta
 
 
@@ -25,6 +26,8 @@ def GenHuman(limit=100, parent=''):
             # generate Human
             g = 0
             if limit > 1:
+                query_head = "INSERT INTO human (firstname, lastname, sex, email, dateadd, dateborn, idParent, idCouple) VALUES "
+                queryes = []
                 for w in range(random.randint(limit, limit)):
                     currdatetime = GetLive()
                     # Data Insert into the table
@@ -55,13 +58,22 @@ def GenHuman(limit=100, parent=''):
                     email_suffix = re.sub('[^0-9a-zA-Z]+', '', currdatetime)
                     email = '{0}.{1}@{2}.com' . format(name_1, email_suffix, genword(minchars=5, maxchars=10, istitle=0))
                     email = email.lower()
-                    query = "INSERT INTO human SET firstname = '" + str(name_1) + "', lastname = '" + str(name_2) + "', sex='" + sex[:1] + "', email = '" + str(email) + "', dateadd='" + currdatetime + "', dateborn = '" + currdatetime + "', idParent = '" + parent + "', idCouple = ''"
-                    try:
-                        db.insert(query)
-                        print('{0} Human created : {1} {2}' . format(g, name_1, name_2))
-                    except ValueError:
-                        print(query)
-                        print('{0} Human creating FAILED : {1} {2}' . format(g, name_1, name_2))
+                    # query = "INSERT INTO human SET firstname = '" + str(name_1) + "', lastname = '" + str(name_2) + "', sex='" + sex[:1] + "', email = '" + str(email) + "', dateadd='" + currdatetime + "', dateborn = '" + currdatetime + "', idParent = '" + parent + "', idCouple = ''"
+                    query_v = "('" + str(name_1) + "', '" + str(name_2) + "', '" + sex[:1] + "', '" + str(email) + "', '" + currdatetime + "', '" + currdatetime + "', '" + parent + "', '')"
+                    queryes.append(query_v)
+                    # try:
+                    #     db.insert(query)
+                    #     print('{0} Human created : {1} {2}' . format(g, name_1, name_2))
+                    # except ValueError:
+                    #     print(query)
+                    #     print('{0} Human creating FAILED : {1} {2}' . format(g, name_1, name_2))
+                queryx = ',' . join(queryes)
+                query = '{0}{1}' . format(query_head, queryx)
+                if len(queryx) > 10:
+                    db.insert(query)
+                    print('{0} Human created' . format(g))
+                else:
+                    print('{0} Human FAIL created' . format(g))
             else:
                 currdatetime = GetLive()
                 # Data Insert into the table
@@ -189,7 +201,7 @@ def SetGivingBirth():
                 parent = '{0}|{1}' . format(pre['idCouple'], pre['id'])
                 db.insert("UPDATE human SET datepregnant=NULL WHERE 1 AND id={0}" . format(pre['id']))
                 numhuman = NumHuman()
-                numgenerate = random.randint(1, random.randint(1, 5))
+                numgenerate = random.randint(1, random.randint(1, random.randint(1, random.randint(1, 5))))
                 if numhuman < 100:
                     numgenerate = 50
                 elif 100 <= numhuman <= 1000:
@@ -221,7 +233,7 @@ def SetMenopause():
 def SetDied():
     db = Database()
     daterequest = DateRequest('agedied')
-    human_nodied = db.getall("SELECT id, firstname, lastname, sex, dateborn FROM human WHERE 1 AND datedied IS NULL AND dateborn<='{0}' ORDER BY dateborn ASC LIMIT 10" . format(daterequest))
+    human_nodied = db.getall("SELECT id, firstname, lastname, sex, dateborn FROM human WHERE 1 AND datedied IS NULL AND dateborn<='{0}' ORDER BY dateborn ASC LIMIT 100" . format(daterequest))
     if human_nodied:
         for pre in human_nodied:
             currdatetime = GetLive()
@@ -253,17 +265,25 @@ try:
             # test()
             print('\n-------- GenHuman --------------')
             GenHuman(1)
+            os.system('clear')
             print('\n-------- SetCouple -------------')
             SetCouple()
+            os.system('clear')
             print('\n-------- SetPregnant -----------')
             SetPregnant()
+            os.system('clear')
             print('\n-------- SetGivingBirth --------')
             SetGivingBirth()
+            os.system('clear')
             print('\n-------- SetMenopause ----------')
             SetMenopause()
+            os.system('clear')
             print('\n-------- SetDied ---------------')
             SetDied()
+            os.system('clear')
         else:
             print('sim off.')
+            time.sleep(.4)
+            os.system('clear')
 except KeyboardInterrupt:
     pass # do cleanup here
