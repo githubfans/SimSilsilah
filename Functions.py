@@ -49,10 +49,32 @@ def gendesc(minitem=3, maxitem=100, minwords=5, maxwords=10, minchars=3, maxchar
 
 
 def GetConfig(str):
-    f = open("config.cnf", "r")
+    import os.path
+    if os.path.exists('config.cnf') and os.access('config.cnf', os.R_OK):
+        fileconfig1 = os.path.getmtime('config.cnf') 
+        fileconfig2 = os.path.getmtime('config.run') 
+        if fileconfig1 > fileconfig2:
+            nf = open("config.cnf", "r")
+            newconfig = nf.read()
+            nf.close()
+            if len(newconfig) > 20:
+                f = open("config.run", "w+")
+                f.write(newconfig)
+                f.close()
+
+    f = open("config.run", "r")
     config = f.read()
     f.close()
-    # print(str)
+
+    if len(config) < 20:
+        nf = open("config.cnf", "r")
+        newconfig = nf.read()
+        config = newconfig
+        nf.close()
+        if len(newconfig) > 20:
+            f = open("config.run", "w+")
+            f.write(newconfig)
+            f.close()
     getx = config.strip().split('\n{0}=' . format(str))[1]
     getx2 = getx.strip().split(';')[0]
     # print('getx2 = {0}' . format(getx2))
