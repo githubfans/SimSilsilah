@@ -52,6 +52,7 @@ def GetConfig(str):
     f = open("config.cnf", "r")
     config = f.read()
     f.close()
+    # print(str)
     getx = config.strip().split('\n{0}=' . format(str))[1]
     getx2 = getx.strip().split(';')[0]
     # print('getx2 = {0}' . format(getx2))
@@ -59,11 +60,32 @@ def GetConfig(str):
     cari_kali = re.search('x', getx2)
     cari_bagi = re.search('/', getx2)
     if cari_koma is not None:
+
+        getx2_1 = getx2.strip().split(',')[0]
+        getx2_2 = getx2.strip().split(',')[1]
+
+        cari_kali_1 = re.search('x', getx2_1)
+        cari_kali_2 = re.search('x', getx2_2)
+
+        if cari_kali_1 is not None:
+            getx2_x1 = int(getx2_1.strip().split('x')[0]) * int(getx2_1.strip().split('x')[1])
+        else:
+            getx2_x1 = getx2_1
+            
+        if cari_kali_2 is not None:
+            getx2_x2 = int(getx2_2.strip().split('x')[0]) * int(getx2_2.strip().split('x')[1])
+        else:
+            getx2_x2 = getx2_2
+
+        if getx2_x1 >= 0 and getx2_x2 >= 0:
+            getx2 = '{0},{1}' . format(getx2_x1, getx2_x2)
+        
         return getx2
-    if cari_kali is not None:
+
+    elif cari_kali is not None:
         hasil_kali = int(getx2.strip().split('x')[0]) * int(getx2.strip().split('x')[1])
         return hasil_kali
-    if cari_bagi is not None:
+    elif cari_bagi is not None:
         hasil_bagi = int(getx2.strip().split('/')[0]) * int(getx2.strip().split('/')[1])
         return hasil_bagi
     else:
@@ -102,6 +124,8 @@ def DateRequest(StrConfig, by='seconds'):
     getLive = GetLive()
     timelive = datetime.strptime(getLive, "%Y-%m-%d %H:%M:%S")
     valCOnfig = GetConfig(StrConfig)
+    # print(StrConfig)
+    # print(valCOnfig)
     valCOnfig = int(valCOnfig.strip().split(',')[0])
     if by is 'seconds':
         return timelive - timedelta(seconds=valCOnfig * 3600 * 24 * 365)
@@ -283,9 +307,11 @@ def SetPregnant():
             date_format = "%Y-%m-%d %H:%M:%S"
             days_after_coupled = datetime.strptime(str(currdatetime), date_format) - datetime.strptime(str(pre['datecoupled']), date_format)
             days_after_coupled = days_after_coupled.days
+
             pregnantx = GetConfig('pregnant')
             pregnantx1 = int(pregnantx.strip().split(',')[0])
             pregnantx2 = int(pregnantx.strip().split(',')[1])
+            
             random_ = random.randint(pregnantx1, pregnantx2)
             if random_ <= days_after_coupled:
                 g += 1
