@@ -15,3 +15,22 @@ CREATE TABLE human (
     datemenopause datetime NULL,
     in_use VARCHAR(40) NOT NULL DEFAULT ''
 );
+
+DROP TABLE IF EXISTS `human_died`;
+CREATE TABLE human_died (
+    id INT(10) PRIMARY KEY,
+    firstname VARCHAR(30) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    idParent VARCHAR(30) NOT NULL DEFAULT 0,
+    idCouple VARCHAR(30) NOT NULL DEFAULT 0,
+    sex VARCHAR(10) NOT NULL DEFAULT 'M',
+    email VARCHAR(50) NOT NULL DEFAULT '',
+    dateadd datetime NULL,
+    dateborn datetime NULL,
+    datecoupled datetime NULL,
+    datepregnant datetime NULL,
+    datedied datetime NULL,
+    datemenopause datetime NULL,
+    in_use VARCHAR(40) NOT NULL DEFAULT ''
+);
+

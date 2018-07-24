@@ -1,13 +1,15 @@
 ---config
 liveison=1;
-simulation_maxnumhuman=171000;
-simulation_mintimeadd=36000; ... 3600 = 1 hour
-simulation_maxtimeadd=86400; ... 864000 = 10 days
+simulation_maxnumhuman=500000;
+simulation_mintimeadd=3600x10; ... 3600 = 1 hour
+simulation_maxtimeadd=86400x3; ... 86400 = 1 day
+simulation_limit_dies=100;
+simulation_limit_couple=100;
+simulation_limit_givingbirth=100;
 starttimestamp=;
 startdatetime=2000-01-01 00:00:00;
-days_add=1;
 agecoupled=20,40;
-agedied=70,200;
+agedied=30,200;
 pregnant=7,730; ... days after coupled 
 givingbirth=230,252; ... days after pregnant
 agemenopause=50,60;

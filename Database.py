@@ -45,6 +45,13 @@ class Database:
         if c is not None:
             return c
 
+    def getone2(self, query):
+        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(query)
+        row = cursor.fetchone()
+        if row is not None:
+            return row['id']
+
     def count(self, query):
         cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query)
