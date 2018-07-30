@@ -11,6 +11,7 @@ CREATE TABLE human (
     dateborn datetime NULL,
     datecoupled datetime NULL,
     datepregnant datetime NULL,
+    dategivingbirth datetime NULL,
     datedied datetime NULL,
     datemenopause datetime NULL,
     in_use VARCHAR(40) NOT NULL DEFAULT ''
@@ -29,6 +30,7 @@ CREATE TABLE human_died (
     dateborn datetime NULL,
     datecoupled datetime NULL,
     datepregnant datetime NULL,
+    dategivingbirth datetime NULL,
     datedied datetime NULL,
     datemenopause datetime NULL,
     in_use VARCHAR(40) NOT NULL DEFAULT ''
