@@ -1,19 +1,19 @@
 ---config
 liveison=1;
-simulation_maxnumhuman=100000;
-simulation_mintimeadd=3600x168; ... 3600 = 1 hour ... 3600x168 = 1 weeks
-simulation_maxtimeadd=86400x30; ... 86400 = 1 day
+simulation_maxnumhuman=300000;
+simulation_mintimeadd=3600x10; ... 3600 = 1 hour ... 3600x168 = 1 weeks
+simulation_maxtimeadd=86400x10; ... 86400 = 1 day
 simulation_speed=1; ... 1 == sleep(1)
-simulation_limit_dies=10;
-simulation_limit_couple=100;
+simulation_limit_couple=10;
 simulation_limit_pregnant=100;
 simulation_limit_givingbirth=100;
-simulation_limit_menopause=50;
+simulation_limit_menopause=10;
+simulation_limit_dies=10;
 starttimestamp=;
 startdatetime=2000-01-01 00:00:00;
-agecoupled=20,40; ... years
-agedied=30,200; ... years
-pregnant=7x1,365x10; ... days after coupled 
-pregnant_aftergbirth=365x1,365x3; ... days after giving birth
+agecoupled=20,50; ... years
+pregnant=7x1,365x1; ... days after coupled 
+pregnant_aftergbirth=180x1,365x3; ... days after giving birth
 givingbirth=230,252; ... days after pregnant
 agemenopause=50,60;
+agedied=30,250; ... years

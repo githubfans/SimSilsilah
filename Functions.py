@@ -232,6 +232,7 @@ def test():
 
 
 def GenHuman(limit=100, parent=''):
+    # print('\n-------- GenHuman --------------')
     # if __name__ == "__main__":
 
     db = Database()
@@ -349,8 +350,8 @@ def GetNoCouple(sexrequest):
         sexneed = 'F'
     elif sexrequest is 'F':
         sexneed = 'M'
-    daterequest = DateRequest('agecoupled')
-    res = db.getone("SELECT id, firstname, lastname, sex, dateborn FROM human WHERE 1 AND datedied IS NULL AND sex='{0}' AND idCouple='' AND dateborn<='{1}' ORDER BY dateborn ASC LIMIT 0,100" . format(sexneed, daterequest))
+    # daterequest = DateRequest('agecoupled')
+    res = db.getone("SELECT id, firstname, lastname, sex, dateborn FROM human WHERE 1 AND datedied IS NULL AND sex='{0}' AND idCouple='' ORDER BY dateborn ASC LIMIT 0,1" . format(sexneed))
     if res is not None:
         currdatetime = GetLive()
         age = db.getone("SELECT DATEDIFF('{0}', '{1}')" . format(currdatetime, res['dateborn']))
