@@ -1,7 +1,7 @@
 from Database import Database
 import random
 import re
-import os
+# import os
 import time
 from time import gmtime, strftime
 import hashlib
@@ -344,6 +344,116 @@ def GenHuman(limit=100, parent=''):
             #     sys.exit()
 
 
+def dbjson_GenHuman(limit=100, parent=''):
+    # print('\n-------- GenHuman --------------')
+    # if __name__ == "__main__":
+
+    # db = Database()
+
+    numhuman = NumHumanLife()
+
+    # print('limit:{0} | parent:{1}' . format(limit, parent))
+
+    if len(parent) > 1:
+
+        # generate Human
+        g = 0
+        if limit > 1:
+            queryes = []
+            for w in range(random.randint(limit, limit)):
+                currdatetime = GetLive()
+                if currdatetime is not None:
+                    # Data Insert into the table
+                    g += 1
+                    name_1 = genname(minwords=1, maxwords=1, minchars=3, maxchars=10)
+                    name_2 = genname(minwords=1, maxwords=2, minchars=3, maxchars=10)
+                    sexx = random.randint(0, 1)
+                    if sexx is 0:
+                        sex = 'M'
+                        # infixname = 'bin'
+                    else:
+                        sex = 'F'
+                        # infixname = 'binti'
+                    # name_2 = '{0} {1}' . format(infixname, name_2)
+                    email_suffix = re.sub('[^0-9a-zA-Z]+', '', currdatetime)
+                    email = '{0}.{1}@{2}.com' . format(name_1, email_suffix, genword(minchars=5, maxchars=10, istitle=0))
+                    email = email.lower()
+                    source_idhuman = '{0}|{1}|{2}' . format(str(email), strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+                    m = hashlib.md5()
+                    m.update(source_idhuman)
+                    idhuman = m.hexdigest()
+                    query_v = " \
+                    { \
+                        'id' : '" + idhuman + "' \
+                        'firstname': '" + str(name_1) + "', \
+                        'lastname': '" + str(name_2) + "', \
+                        'sex': '" + sex[:1] + "', \
+                        'email' : '" + str(email) + "', \
+                        'dateadd' : '" + currdatetime + "', \
+                        'dateborn' : '" + currdatetime + "', \
+                        'idParent': '" + parent + "', \
+                        'idCouple': '', \
+                    }"
+                    queryes.append(query_v)
+            queryx = ', ' . join(queryes)
+            if len(queryx) > 10:
+                finsert = open('db.json', 'w')
+                finsert.write(queryx)
+                # print('{0} Human created' . format(g))
+            # else:
+                # print('{0} Human FAIL created' . format(g))
+        else:
+            currdatetime = GetLive()
+            if currdatetime is not None:
+                # Data Insert into the table
+                name_1 = genname(minwords=1, maxwords=1, minchars=3, maxchars=10)
+                name_2 = genname(minwords=1, maxwords=2, minchars=3, maxchars=10)
+                # daddy_id = parent.strip().split('|')[0]
+                # daddy_row = db.getone("SELECT firstname, lastname FROM human WHERE 1 AND id={0}" . format(daddy_id))
+                # name_2 = '{0} {1}' . format(daddy_row['firstname'], daddy_row['lastname'])
+                sexx = random.randint(0, 1)
+                if sexx is 0:
+                    sex = 'M'
+                    # infixname = 'bin'
+                else:
+                    sex = 'F'
+                    # infixname = 'binti'
+                # name_2 = '{0} {1}' . format(infixname, name_2)
+                email_suffix = re.sub('[^0-9a-zA-Z]+', '', currdatetime)
+                email = '{0}.{1}@{2}.com' . format(name_1, email_suffix, genword(minchars=5, maxchars=5, istitle=0))
+                query = "INSERT INTO human SET firstname = '" + name_1 + "', lastname = '" + name_2 + "', sex='" + sex[:1] + "', email = '" + email + "', dateadd='" + currdatetime + "', dateborn = '" + currdatetime + "', idParent = '" + parent + "', idCouple = ''"
+                try:
+                    db.insert(query)
+                    # print('1 Human created : {0} {1}' . format(name_1, name_2))
+                except ValueError:
+                    print(query)
+                    # print('1 Human creating FAILED : {0} {1}' . format(name_1, name_2))
+
+    else:
+        currdatetime = GetLive()
+        if currdatetime is not None:
+            if numhuman < 2:
+                name_1 = genname(minwords=1, maxwords=1, minchars=3, maxchars=10)
+                name_2 = genname(minwords=1, maxwords=2, minchars=3, maxchars=10)
+                email = '{0}@{1}.com' . format(name_1, genword(minchars=5, maxchars=10, istitle=0))
+                db.insert("INSERT INTO human SET firstname = '" + str(name_1) + "', lastname = '" + str(name_2) + "', sex='M', email = '" + str(email) + "', dateadd='" + currdatetime + "', dateborn = '" + currdatetime + "', idParent = '', idCouple = ''")
+                print('First Human created : {0} {1}' . format(name_1, name_2))
+
+                name_1 = genname(minwords=1, maxwords=1, minchars=3, maxchars=10)
+                name_2 = genname(minwords=1, maxwords=2, minchars=3, maxchars=10)
+                email = '{0}@{1}.com' . format(name_1, genword(minchars=5, maxchars=10, istitle=0))
+                db.insert("INSERT INTO human SET firstname = '" + str(name_1) + "', lastname = '" + str(name_2) + "', sex='F', email = '" + str(email) + "', dateadd='" + currdatetime + "', dateborn = '" + currdatetime + "', idParent = '', idCouple = ''")
+                print('Second Human created : {0} {1}' . format(name_1, name_2))
+            elif numhuman is 2:
+                print('masih adam hawa di bumi ini.')
+
+            # if numhuman >= 80000:
+            #     sys.exit()
+
+
+
+
+
 def GetNoCouple(sexrequest):
     db = Database()
     if sexrequest is 'M':
@@ -458,15 +568,18 @@ def SetGivingBirth():
                     parent = '{0}|{1}' . format(pre['idCouple'], pre['id'])
                     db.insert("UPDATE human SET datepregnant=NULL, dategivingbirth='{0}' WHERE 1 AND id={1}" . format(currdatetime, pre['id']))
 
+                    if numhuman >= 200000:
+                        numgenerate = random.randint(1, 2)
                     if 100000 <= numhuman < 200000:
                         numgenerate = random.randint(1, random.randint(1, random.randint(1, random.randint(1, 5))))
                     elif 1000 <= numhuman < 100000:
                         numgenerate = random.randint(1, 5)
-                    elif 0 < numhuman < 1000:
+                    elif 0 <= numhuman < 1000:
                         numgenerate = random.randint(2, 10)
 
                     addbaby += numgenerate
-                    # print(addbaby)
+                    # print('addbaby = {0}' . format(addbaby))
+                    # print('numgenerate = {0}' . format(numgenerate))
                     # print('GIVING BIRTH >> {0} {1} : {2} baby(s)' . format(pre['firstname'], pre['lastname'], numgenerate))
                     GenHuman(numgenerate, parent)
     stopt = time.time()
@@ -475,7 +588,7 @@ def SetGivingBirth():
         print('Giving Birth >> {0} babies in {1}' . format(addbaby, fwaktu_proses))
 
 
-def SetMenopause():
+def SetMenopause(sesscode):
     startt = time.time()
     db = Database()
     numhuman = LastID()
@@ -503,10 +616,20 @@ def SetMenopause():
             random_menopause = random.randint(agemenopausex1, agemenopausex2)
             if random_menopause <= age:
                 g += 1
-                db.insert("UPDATE human SET datemenopause='{0}' WHERE 1 AND id={1}" . format(currdatetime, pre['id']))
+                db.insert("UPDATE human SET datemenopause='{0}', in_use='{1}' WHERE 1 AND id={2}" . format(currdatetime, sesscode, pre['id']))
     stopt = time.time()
     fwaktu_proses = waktu_proses(int(stopt) - int(startt))
     if g > 0:
+        try:
+            q_move_to_human_meno = "REPLACE INTO human_meno SELECT * FROM human WHERE 1 AND datemenopause IS NOT NULL AND in_use='{0}'" . format(sesscode)
+            db.insert(q_move_to_human_meno)
+            q_delete_meno_at_human = "DELETE FROM human WHERE 1 and datemenopause IS NOT NULL AND in_use='{0}'" . format(sesscode)
+            db.insert(q_delete_meno_at_human)
+            # print('All meno moved.')
+        except ValueError:
+            print('Fail to move menopause.')
+        stopt = time.time()
+        fwaktu_proses = waktu_proses(int(stopt) - int(startt))
         print('MENOPAUSE >> {0} females' . format(g, fwaktu_proses))
 
 
@@ -523,6 +646,8 @@ def SetDied(sesscode):
         addage = 20
     daterequest = DateRequest('agedied')
     simulation_limit_dies = GetConfig('simulation_limit_dies')
+
+    # tbl human
     human_nodied = db.getall("SELECT id, firstname, lastname, sex, dateborn FROM human WHERE 1 AND datedied IS NULL AND dateborn<='{0}' AND in_use='' ORDER BY dateborn ASC LIMIT 0,{1}" . format(daterequest, simulation_limit_dies))
     g = 0
     if human_nodied:
@@ -538,15 +663,43 @@ def SetDied(sesscode):
             if random_died <= age:
                 g += 1
                 db.insert("UPDATE human SET datedied='{0}', in_use='{1}' WHERE 1 AND id={2}" . format(currdatetime, sesscode, pre['id']))
+
+    # tbl human_meno
+    human_nodied = db.getall("SELECT id, firstname, lastname, sex, dateborn FROM human_meno WHERE 1 AND datedied IS NULL AND in_use='' ORDER BY dateborn ASC LIMIT 0,{1}" . format(daterequest, simulation_limit_dies))
+    # g = 0
+    if human_nodied:
+        for pre in human_nodied:
+            currdatetime = GetLive()
+            date_format = "%Y-%m-%d %H:%M:%S"
+            age = datetime.strptime(str(currdatetime), date_format) - datetime.strptime(str(pre['dateborn']), date_format)
+            age = age.days / 365
+            agediedx = GetConfig('agedied')
+            agediedx1 = int(agediedx.strip().split(',')[0])
+            agediedx2 = int(agediedx.strip().split(',')[1])
+            random_died = random.randint(agediedx1, agediedx2) + addage
+            if random_died <= age:
+                g += 1
+                db.insert("UPDATE human_meno SET datedied='{0}', in_use='{1}' WHERE 1 AND id={2}" . format(currdatetime, sesscode, pre['id']))
+
     if g > 0:
         try:
+
             q_move_to_human_died = "REPLACE INTO human_died SELECT * FROM human WHERE 1 AND datedied IS NOT NULL AND in_use='{0}'" . format(sesscode)
             db.insert(q_move_to_human_died)
+
+            q_move_to_human_died = "REPLACE INTO human_died SELECT * FROM human_meno WHERE 1 AND datedied IS NOT NULL AND in_use='{0}'" . format(sesscode)
+            db.insert(q_move_to_human_died)
+
             q_delete_died_at_human = "DELETE FROM human WHERE 1 and datedied IS NOT NULL AND in_use='{0}'" . format(sesscode)
             db.insert(q_delete_died_at_human)
+
+            q_delete_died_at_human_meno = "DELETE FROM human_meno WHERE 1 and datedied IS NOT NULL AND in_use='{0}'" . format(sesscode)
+            db.insert(q_delete_died_at_human_meno)
+
             # print('All died moved.')
         except ValueError:
             print('Fail to move died.')
+
         stopt = time.time()
         fwaktu_proses = waktu_proses(int(stopt) - int(startt))
         print('DIED >> {0} humans in {1}' . format(g, fwaktu_proses))
@@ -568,3 +721,30 @@ def NumHumanDied():
 def LastID():
     db = Database()
     return db.getone2("SELECT id FROM human WHERE 1 ORDER BY id DESC LIMIT 1")
+
+
+# db-text
+
+def replace_line(file_name, line_num, text):
+    lines = open(file_name, 'r').readlines()
+    lines[line_num] = text
+    out = open(file_name, 'w')
+    if out.close():
+        out.writelines(lines)
+    else:
+        print('Database in use !!!')
+    out.close()
+
+
+def find_replace_line(file_name, text_find, text_replace):
+    fopen = open(file_name, 'r')
+    fopen_read = fopen.read()
+    fopen_part = fopen_read.strip().split('\n')
+    linemark = 0
+    for data in fopen_part:
+        # print(data)
+        if text_find in data:
+            text_replace = str(linemark) + text_replace + '\n'
+            replace_line(file_name=file_name, line_num=linemark, text_replace=text_replace)
+        linemark += 1
+    fopen.close()

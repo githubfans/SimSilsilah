@@ -1,4 +1,4 @@
-from Functions import GetConfig, SetLive, GetLive, LastID, NumHumanLife, NumHumanDied
+from Functions import GetConfig, SetLive, GetLive, LastID, NumHumanLife, NumHumanDied, waktu_proses
 # from time import gmtime, strftime
 import time
 import os
@@ -6,6 +6,7 @@ import os
 
 try:
     while True:
+        startt = time.time()
         maxnumhuman = GetConfig('simulation_maxnumhuman')
         # speed = GetConfig('simulation_speed')
         numhuman = LastID()
@@ -37,11 +38,13 @@ try:
             # getLive = GetLive()
             SetLive()
             print('live....')
-            time.sleep(3)
+            time.sleep(2)
             os.system('clear')
         else:
             print('sleep....')
-            time.sleep(1)
+            time.sleep(5)
             os.system('clear')
+            stopt = time.time()
+            fwaktu_proses = waktu_proses(int(stopt) - int(startt))
 except KeyboardInterrupt:
     pass
