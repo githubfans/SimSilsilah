@@ -258,7 +258,7 @@ def json_humans(jsonstr):
 
 
 def generate_json_human(queryes, parent, currdatetime):
-    print(currdatetime)
+    # print(currdatetime)
     # Data Insert into the table
     name_1 = genname(minwords=1, maxwords=1, minchars=3, maxchars=10)
     name_2 = genname(minwords=1, maxwords=2, minchars=3, maxchars=10)
@@ -269,7 +269,7 @@ def generate_json_human(queryes, parent, currdatetime):
         sex = 'F'
     # email_suffix = re.sub('[^0-9a-zA-Z]+', '', currdatetime)
     email_suffix = abs(time.mktime(datetime.strptime(currdatetime, "%Y-%m-%d %H:%M:%S").timetuple()))
-    print(email_suffix)
+    # print(email_suffix)
     email = '{0}.{1}@{2}.com' . format(name_1, email_suffix, genword(minchars=5, maxchars=10, istitle=0))
     email = email.lower()
     idCouple = ''
@@ -302,7 +302,7 @@ def GenHuman_json(limit=100, parent=''):
     # varnh = str(stat).strip().split('num_human=')[1]
     # numhuman = varnh.strip().split('\n')[0]
     numhuman = stats(var='num_human')
-    print(numhuman)
+    # print(numhuman)
     if numhuman == 0:
         parent = '0'
         limit = 2
@@ -333,7 +333,7 @@ def GenHuman_json(limit=100, parent=''):
                     text_to_insert = ',\n' + queryx
                 else:
                     text_to_insert = '' + queryx
-                print(queryx)
+                # print(queryx)
                 InsertDataToDB('db.json', insert_to_line=to_line, text=text_to_insert)
                 optimizedb()
                 numberOfLine_InFile = numberOfLineInFile('db.json')
@@ -352,7 +352,7 @@ def GenHuman_json(limit=100, parent=''):
 
 
 def GetNoCouple_json(sexrequest):
-    print('GetNoCouple_json')
+    # print('GetNoCouple_json')
     if sexrequest is 'M':
         sexneed = 'F'
     elif sexrequest is 'F':
@@ -436,9 +436,6 @@ def SetCouple():
                             jloads['humans'][index_num]['idCouple'] = data['id']
                         if jloads['humans'][hit]['idCouple'] != '' and jloads['humans'][index_num]['idCouple'] != '':
                             update_humans(json_=jloads)
-                        # findID_updateKey(file_name='db.json', find_id=data['id'], key='idCouple', key_new_value=choose_couple['id'])
-                        # time.sleep(1)
-                        # findID_updateKey(file_name='db.json', find_id=choose_couple['id'], key='idCouple', key_new_value=data['id'])
                 except IndexError:
                     print('Error.... SetCouple > try')
         hit += 1
@@ -446,19 +443,19 @@ def SetCouple():
     fwaktu_proses = waktu_proses(int(stopt) - int(startt))
     if g > 0:
         print('**COUPLED** >> {0} couples in {1}' . format(g, fwaktu_proses))
-        print(jloads)
+        # print(jloads)
 
 
 def update_humans(json_):
     jdumps = json.dumps(json_)
-    print(jdumps)
+    # print(jdumps)
     jdumps = jdumps.replace('{"humans": [{', '{\n"humans":\n[\n{')
     jdumps = jdumps.replace('}, {', '},\n{')
     if jdumps.endswith('}]}'):
         jdumps = jdumps.replace('}]}', '}\n]\n}')
     if jdumps.endswith('},\n]\n}'):
         jdumps = jdumps.replace('},\n]\n}', '}\n]\n}')
-    print(jdumps)
+    # print(jdumps)
     # exit()
     # time.sleep(1)
     f = open('db.json', "w")
@@ -472,7 +469,6 @@ def findId_returnIndexOrder(find_id):
     fread = str(fread).replace('\n', '')
     fread = fread.encode('utf-8')
     jloads = json.loads(fread)
-    g = 0
     hit = 0
     returns = False
     for data in jloads['humans']:

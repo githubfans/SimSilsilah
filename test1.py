@@ -6,7 +6,7 @@ from Functions_json import *
 import random
 # import json
 
-GenHuman_json(random.randint(1, 10), 1)
+GenHuman_json(random.randint(100, 500), 1)
 # GetNoCouple_json(sexrequest='F')
 # GetNoCouple_json(sexrequest='M')
 SetCouple()
