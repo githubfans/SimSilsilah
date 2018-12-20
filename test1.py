@@ -6,18 +6,29 @@ from Functions_json import *
 import random
 # import json
 
-# GenHuman_json(random.randint(3, 5), 1)
-GetNoCouple_json(sexrequest='M')
+GenHuman_json(random.randint(1, 10), 1)
+# GetNoCouple_json(sexrequest='F')
+# GetNoCouple_json(sexrequest='M')
+SetCouple()
 
-# def numHuman():
+# def optimizedb():
 #     f = open('db.json', 'r')
 #     fread = f.read()
 #     fread = str(fread).replace('\n', '')
-#     fread = fread.encode('utf-8')
+#     fread = str(fread).replace('}\n,\n{', '},\n{')
 #     print(fread)
+#     fread = fread.encode('utf-8')
 #     jloads = json.loads(fread)
 #     # jloads['humans']
-#     return len(jloads['humans'])
+#     fread = str(json.dumps(jloads))
+#     fread = fread.replace('{"humans": [{', '{\n"humans":\n[\n{')
+#     fread = fread.replace('}, {', '},\n{')
+#     f = open('db.json', 'w')
+#     f.write(fread)
+#     f.close()
+    # # return jloads['humans']
+
+# optimizedb()
 
 
 # def InsertDataToDB(filedb, insert_to_line, text):

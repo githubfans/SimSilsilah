@@ -82,36 +82,36 @@ def GetConfig(str):
     getx = config.strip().split('\n{0}=' . format(str))[1]
     getx2 = getx.strip().split(';')[0]
     # print('getx2 = {0}' . format(getx2))
-    cari_koma = re.search(',', getx2)
-    cari_kali = re.search('x', getx2)
-    cari_bagi = re.search('/', getx2)
-    if cari_koma is not None:
+    # cari_koma = re.search(',', getx2)
+    # cari_kali = re.search('x', getx2)
+    # cari_bagi = re.search('/', getx2)
+    if ',' in getx2:
 
         getx2_1 = getx2.strip().split(',')[0]
         getx2_2 = getx2.strip().split(',')[1]
 
-        cari_kali_1 = re.search('x', getx2_1)
-        cari_kali_2 = re.search('x', getx2_2)
+        # cari_kali_1 = re.search('x', getx2_1)
+        # cari_kali_2 = re.search('x', getx2_2)
 
-        if cari_kali_1 is not None:
+        if 'x' in getx2_1:
             getx2_x1 = int(getx2_1.strip().split('x')[0]) * int(getx2_1.strip().split('x')[1])
         else:
             getx2_x1 = getx2_1
 
-        if cari_kali_2 is not None:
+        if 'x' in getx2_2:
             getx2_x2 = int(getx2_2.strip().split('x')[0]) * int(getx2_2.strip().split('x')[1])
         else:
             getx2_x2 = getx2_2
 
-        if getx2_x1 >= 0 and getx2_x2 >= 0:
+        if int(getx2_x1) >= 0 and int(getx2_x2) >= 0:
             getx2 = '{0},{1}' . format(getx2_x1, getx2_x2)
 
         return getx2
 
-    elif cari_kali is not None:
+    elif 'x' in getx2:
         hasil_kali = int(getx2.strip().split('x')[0]) * int(getx2.strip().split('x')[1])
         return hasil_kali
-    elif cari_bagi is not None:
+    elif '/' in getx2:
         hasil_bagi = int(getx2.strip().split('/')[0]) * int(getx2.strip().split('/')[1])
         return hasil_bagi
     else:
@@ -258,7 +258,7 @@ def json_humans(jsonstr):
 
 
 def generate_json_human(queryes, parent, currdatetime):
-
+    print(currdatetime)
     # Data Insert into the table
     name_1 = genname(minwords=1, maxwords=1, minchars=3, maxchars=10)
     name_2 = genname(minwords=1, maxwords=2, minchars=3, maxchars=10)
@@ -267,7 +267,9 @@ def generate_json_human(queryes, parent, currdatetime):
         sex = 'M'
     else:
         sex = 'F'
-    email_suffix = re.sub('[^0-9a-zA-Z]+', '', currdatetime)
+    # email_suffix = re.sub('[^0-9a-zA-Z]+', '', currdatetime)
+    email_suffix = abs(time.mktime(datetime.strptime(currdatetime, "%Y-%m-%d %H:%M:%S").timetuple()))
+    print(email_suffix)
     email = '{0}.{1}@{2}.com' . format(name_1, email_suffix, genword(minchars=5, maxchars=10, istitle=0))
     email = email.lower()
     idCouple = ''
@@ -320,17 +322,20 @@ def GenHuman_json(limit=100, parent=''):
         queryx = ',\n' . join(queryes)
         # print(queryx)
         # queryx = '{\n"humans":\n[\n' + queryx + '\n]\n}'
+        optimizedb()
         numberOfLine_InFile = numberOfLineInFile('db.json')
         print('before insert :' + str(numberOfLine_InFile))
         if queryx != '':
             try:
                 # queryx = queryx.exncode('utf-8')
                 to_line = numberOfLine_InFile - 2
-                if numberOfLine_InFile > 7:
+                if numberOfLine_InFile >= 7:
                     text_to_insert = ',\n' + queryx
                 else:
                     text_to_insert = '' + queryx
+                print(queryx)
                 InsertDataToDB('db.json', insert_to_line=to_line, text=text_to_insert)
+                optimizedb()
                 numberOfLine_InFile = numberOfLineInFile('db.json')
                 print('after insert :' + str(numberOfLine_InFile))
                 last_numhuman = int(numhuman) + int(num_generating)
@@ -347,6 +352,7 @@ def GenHuman_json(limit=100, parent=''):
 
 
 def GetNoCouple_json(sexrequest):
+    print('GetNoCouple_json')
     if sexrequest is 'M':
         sexneed = 'F'
     elif sexrequest is 'F':
@@ -359,34 +365,32 @@ def GetNoCouple_json(sexrequest):
     fread = str(fread).replace('\n', '')
     fread = fread.encode('utf-8')
     jloads = json.loads(fread)
+    returns = ''
     for data in jloads['humans']:
         if data['idCouple'] == '' and data['sex'] == sexneed:
             # print(data)
-            currdatetime = GetLive()
-            # print(currdatetime)
-            # age = db.getone("SELECT DATEDIFF('{0}', '{1}')" . format(currdatetime, res['dateborn']))
-            age = get_age(currdatetime='2018-12-19 00:00:00', dateborn=data['dateborn'])
-            age = str(age).strip().split(' days')[0]
-            age = int(age) / 365
-            age1 = str(age).strip().split('.')[0]
-            age2 = str(age).strip().split('.')[1]
-            print(age1)
-            print(int(age2) / int(age2))
-            # agecoupledx = GetConfig('agecoupled')
-            # agecoupledx1 = int(agecoupledx.strip().split(',')[0])
-            # agecoupledx2 = int(agecoupledx.strip().split(',')[1])
-            # random_age = random.randint(agecoupledx1, agecoupledx2)
-            # if random_age < age:
-            #     return res
+            currdatetime = '1028-12-19 00:00:00'
+            # GetLive()
+            age = get_age(currdatetime, data['dateborn'])
+            agecoupledx = GetConfig('agecoupled')
+            agecoupledx1 = int(agecoupledx.strip().split(',')[0])
+            agecoupledx2 = int(agecoupledx.strip().split(',')[1])
+            if agecoupledx1 <= int(age) <= agecoupledx2:
+                returns = data
+                break
+    return returns
 
 
 def get_age(currdatetime, dateborn):
     # ts = '2013-01-12 15:27:43'
-    f = '%Y-%m-%d %H:%M:%S'
-    currdatetime = datetime.strptime(currdatetime, f)
-    dateborn = datetime.strptime(dateborn, f)
-    selisih = currdatetime - dateborn
-    return selisih
+    # f = '%Y-%m-%d %H:%M:%S'
+    # currdatetime = datetime.strptime(currdatetime, f)
+    # dateborn = datetime.strptime(dateborn, f)
+    # selisih = currdatetime - dateborn
+    # return selisih
+    date_format = "%Y-%m-%d %H:%M:%S"
+    age = datetime.strptime(str(currdatetime), date_format) - datetime.strptime(str(dateborn), date_format)
+    return age.days / 365
 
 
 def SetCouple():
@@ -394,33 +398,89 @@ def SetCouple():
     # db = Database()
     daterequest = DateRequest('agecoupled')
     simulation_limit_couple = GetConfig('simulation_limit_couple')
-    q_nocouple = "SELECT id, firstname, lastname, sex, dateborn FROM human WHERE 1 AND datedied IS NULL AND idCouple='' AND dateborn<='{0}' ORDER BY dateborn ASC LIMIT 0,{1}" . format(daterequest, simulation_limit_couple)
-    human_nocouple = db.getall(q_nocouple)
+    # q_nocouple = "SELECT id, firstname, lastname, sex, dateborn FROM human WHERE 1 AND datedied IS NULL AND idCouple='' AND dateborn<='{0}' ORDER BY dateborn ASC LIMIT 0,{1}" . format(daterequest, simulation_limit_couple)
+    # human_nocouple = db.getall(q_nocouple)
     # print(q_nocouplse)
     # sys.exit()
+    f = open('db.json', 'r')
+    fread = f.read()
+    fread = str(fread).replace('\n', '')
+    fread = fread.encode('utf-8')
+    jloads = json.loads(fread)
     g = 0
-    if human_nocouple:
-        for co in human_nocouple:
-            currdatetime = GetLive()
-            date_format = "%Y-%m-%d %H:%M:%S"
-            if currdatetime is not None and co['dateborn'] is not None:
-                age = datetime.strptime(str(currdatetime), date_format) - datetime.strptime(str(co['dateborn']), date_format)
-                age = age.days / 365
-                if age > 0:
-                    agecoupledx = GetConfig('agecoupled')
-                    agecoupledx1 = int(agecoupledx.strip().split(',')[0])
-                    agecoupledx2 = int(agecoupledx.strip().split(',')[1])
-                    random_ = random.randint(agecoupledx1, agecoupledx2)
-                    if random_ <= age:
-                        choose_couple = GetNoCouple(sexrequest=co['sex'])
-                        if choose_couple is not None:
-                            g += 1
-                            db.insert("UPDATE human SET idCouple={0}, datecoupled='{1}' WHERE 1 AND id={2}" . format(choose_couple['id'], currdatetime, co['id']))
-                            db.insert("UPDATE human SET idCouple={0}, datecoupled='{1}' WHERE 1 AND id={2}" . format(co['id'], currdatetime, choose_couple['id']))
+    hit = 0
+    for data in jloads['humans']:
+        if data['idCouple'] == '':
+            g += 1
+            # print('---' + str(g))
+            currdatetime = '1028-12-19 00:00:00'
+            # GetLive()
+            age = get_age(currdatetime, data['dateborn'])
+            # print(age)
+
+            agecoupledx = GetConfig('agecoupled')
+            # print(agecoupledx)
+            agecoupledx1 = int(agecoupledx.strip().split(',')[0])
+            agecoupledx2 = int(agecoupledx.strip().split(',')[1])
+            # random_age = random.randint(agecoupledx1, agecoupledx2)
+            # print(age)
+            if agecoupledx1 <= int(age) <= agecoupledx2:
+                try:
+                    choose_couple = GetNoCouple_json(sexrequest=data['sex'])
+                    if choose_couple != '':
+                        print('~~~~~~~~~~\nset couple for : ', data['id'], choose_couple['id'])
+                        # perubahan data : dilakukan 2 data bersamaan
+                        jloads['humans'][hit]['idCouple'] = choose_couple['id']
+                        index_num = findId_returnIndexOrder(find_id=choose_couple['id'])
+                        if index_num is not False:
+                            jloads['humans'][index_num]['idCouple'] = data['id']
+                        if jloads['humans'][hit]['idCouple'] != '' and jloads['humans'][index_num]['idCouple'] != '':
+                            update_humans(json_=jloads)
+                        # findID_updateKey(file_name='db.json', find_id=data['id'], key='idCouple', key_new_value=choose_couple['id'])
+                        # time.sleep(1)
+                        # findID_updateKey(file_name='db.json', find_id=choose_couple['id'], key='idCouple', key_new_value=data['id'])
+                except IndexError:
+                    print('Error.... SetCouple > try')
+        hit += 1
     stopt = time.time()
     fwaktu_proses = waktu_proses(int(stopt) - int(startt))
     if g > 0:
         print('**COUPLED** >> {0} couples in {1}' . format(g, fwaktu_proses))
+        print(jloads)
+
+
+def update_humans(json_):
+    jdumps = json.dumps(json_)
+    print(jdumps)
+    jdumps = jdumps.replace('{"humans": [{', '{\n"humans":\n[\n{')
+    jdumps = jdumps.replace('}, {', '},\n{')
+    if jdumps.endswith('}]}'):
+        jdumps = jdumps.replace('}]}', '}\n]\n}')
+    if jdumps.endswith('},\n]\n}'):
+        jdumps = jdumps.replace('},\n]\n}', '}\n]\n}')
+    print(jdumps)
+    # exit()
+    # time.sleep(1)
+    f = open('db.json', "w")
+    f.write(str(jdumps))
+    f.close()
+
+
+def findId_returnIndexOrder(find_id):
+    f = open('db.json', 'r')
+    fread = f.read()
+    fread = str(fread).replace('\n', '')
+    fread = fread.encode('utf-8')
+    jloads = json.loads(fread)
+    g = 0
+    hit = 0
+    returns = False
+    for data in jloads['humans']:
+        if data['id'] == find_id:
+            returns = hit
+            break
+        hit += 1
+    return returns
 
 
 def SetPregnant():
@@ -723,36 +783,42 @@ def findID_returnData(file_name, text_find):
 
 
 def findID_updateKey(file_name, find_id, key, key_new_value):
-    fopen = open(file_name, 'r')
-    fopen_read = fopen.read()
-    fopen_part = fopen_read.strip().split('\n')
-    linemark = 0
-    for data in fopen_part:
-        if '"id":"' + find_id + '"' in data:
-            if data.endswith('},'):
-                sdata = str(data).replace('},', '}')
-            jloads = json.loads(sdata)
-            # print(jloads)
-            jloads[key] = key_new_value
-            returns = jloads[key]
-            # print(jloads)
-            jdumps = json.dumps(jloads)
-            replace_line(file_name, line_num=linemark, text=str(jdumps) + ',\n')
-            break
-        linemark += 1
-    fopen.close()
-    return returns
-
-
-def findAdamHawa_updateCouple(file_name):
-    fopen = open(file_name, 'r')
-    fopen_read = fopen.read()
-    jloads = json.loads(fopen_read)
-    adam = jloads['humans'][0]['id']
-    hawa = jloads['humans'][1]['id']
-    fopen.close()
-
-# findAdamHawa_updateCouple(file_name='db.json')
+    f = open(file_name, 'r')
+    fread = f.read()
+    f.close()
+    # print(fread)
+    fread = str(fread).replace('\n', '')
+    # print(fread)
+    fread = fread.encode('utf-8')
+    # print(fread)
+    jloads = json.loads(fread)
+    hit = 0
+    for data in jloads['humans']:
+        if data['id'] == find_id and data['idCouple'] == '':
+            print('=========================\ndata ke-' + str(hit))
+            print(data)
+            # print('sebelum update')
+            # print(data)
+            # data[key] = key_new_value
+            jloads['humans'][hit][key] = key_new_value
+            # print('setelah update **')
+            # print(data)
+        hit += 1
+    # print('after  combine')
+    # print(jloads['humans'][6])
+    # print(jloads['humans'][5])
+    jdumps = json.dumps(jloads)
+    print(jdumps)
+    jdumps = jdumps.replace('{"humans": [{', '{\n"humans":\n[\n{')
+    jdumps = jdumps.replace('}, {', '},\n{')
+    if jdumps.endswith('}]}'):
+        jdumps = jdumps.replace('}]}', '}\n]\n}')
+    if jdumps.endswith('},\n]\n}'):
+        jdumps = jdumps.replace('},\n]\n}', '}\n]\n}')
+    # time.sleep(3)
+    f = open(file_name, "w")
+    f.write(str(jdumps))
+    f.close()
 
 
 def InsertDataToDB(filedb, insert_to_line, text):
@@ -769,6 +835,7 @@ def InsertDataToDB(filedb, insert_to_line, text):
 def numHuman():
     f = open('db.json', 'r')
     fread = f.read()
+    f.close()
     # print(fread)
     fread = str(fread).replace('\n', '')
     # print(fread)
@@ -793,3 +860,24 @@ def getHumanId(index):
     fread = fread.encode('utf-8')
     jloads = json.loads(fread)
     return jloads['humans'][index]['id']
+
+
+def optimizedb():
+    f = open('db.json', 'r')
+    fread = f.read()
+    fread = str(fread).replace('\n', '')
+    fread = str(fread).replace('}\n,\n{', '},\n{')
+    # print(fread)
+    fread = fread.encode('utf-8')
+    jloads = json.loads(fread)
+    # jloads['humans']
+    fread = str(json.dumps(jloads))
+    fread = fread.replace('{"humans": [{', '{\n"humans":\n[\n{')
+    fread = fread.replace('}, {', '},\n{')
+    if fread.endswith('}]}'):
+        fread = fread.replace('}]}', '}\n]\n}')
+    if fread.endswith('},\n]\n}'):
+        fread = fread.replace('},\n]\n}', '}\n]\n}')
+    f = open('db.json', 'w')
+    f.write(fread)
+    f.close()
