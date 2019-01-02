@@ -2,50 +2,45 @@ from Functions_json import *
 # from time import gmtime, strftime
 # import os
 # import time
-# import sys
+import sys
 import random
 # import json
+session = sess_code()
 
-GenHuman_json(random.randint(100, 500), 1)
-# GetNoCouple_json(sexrequest='F')
-# GetNoCouple_json(sexrequest='M')
-SetCouple()
-
-# def optimizedb():
-#     f = open('db.json', 'r')
-#     fread = f.read()
-#     fread = str(fread).replace('\n', '')
-#     fread = str(fread).replace('}\n,\n{', '},\n{')
-#     print(fread)
-#     fread = fread.encode('utf-8')
-#     jloads = json.loads(fread)
-#     # jloads['humans']
-#     fread = str(json.dumps(jloads))
-#     fread = fread.replace('{"humans": [{', '{\n"humans":\n[\n{')
-#     fread = fread.replace('}, {', '},\n{')
-#     f = open('db.json', 'w')
-#     f.write(fread)
-#     f.close()
-    # # return jloads['humans']
-
-# optimizedb()
+# print(sys.argv)
+# print(sys.argv[0])
 
 
-# def InsertDataToDB(filedb, insert_to_line, text):
-#     f = open(filedb, "r")
-#     contents = f.readlines()
-#     f.close()
-#     contents.insert(insert_to_line, text + '\n')
-#     f = open(filedb, "w")
-#     contents = "".join(contents)
-#     f.write(contents)
-#     f.close()
+try:
+    while True:
+        maxnumhuman = GetConfig('simulation_maxnumhuman')
+        numhuman = LastID()
+        if numhuman <= maxnumhuman and sys.argv[1] is not None:
+            startt = time.time()
+            GetLive()
+            print('>>>>>>' + sys.argv[1])
+            # GenHuman(random.randint(50, 100), 1)
+            if sys.argv[1] == 'SetCouple':
+                SetCouple(sess=session)
+            elif sys.argv[1] == 'SetPregnant':
+                SetPregnant(sess=session)
+            elif sys.argv[1] == 'SetGivingBirth':
+                SetGivingBirth(sess=session)
+            elif sys.argv[1] == 'SetMenopause':
+                SetMenopause(sess=session)
+            elif sys.argv[1] == 'SetDied':
+                SetDied(sess=session)
+            elif sys.argv[1] == 'restart':
+                restart(sess=session)
+                exit()
 
-
-# def getHumanId(index):
-#     f = open('db.json', 'r')
-#     fread = f.read()
-#     fread = str(fread).replace('\n', '')
-#     fread = fread.encode('utf-8')
-#     jloads = json.loads(fread)
-#     return jloads['humans'][index]['id']
+            stopt = time.time()
+            fwaktu_proses = waktu_proses(int(stopt) - int(startt))
+            print('\n******** Time in cycle : {0} ********\n' . format(fwaktu_proses))
+            time.sleep(random.randint(1, 3))
+        else:
+            print('sim off.')
+            time.sleep(1)
+            os.system('clear')
+except KeyboardInterrupt:
+    pass

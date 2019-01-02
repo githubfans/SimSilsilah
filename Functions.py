@@ -721,30 +721,3 @@ def NumHumanDied():
 def LastID():
     db = Database()
     return db.getone2("SELECT id FROM human WHERE 1 ORDER BY id DESC LIMIT 1")
-
-
-# db-text
-
-def replace_line(file_name, line_num, text):
-    lines = open(file_name, 'r').readlines()
-    lines[line_num] = text
-    out = open(file_name, 'w')
-    if out.close():
-        out.writelines(lines)
-    else:
-        print('Database in use !!!')
-    out.close()
-
-
-def find_replace_line(file_name, text_find, text_replace):
-    fopen = open(file_name, 'r')
-    fopen_read = fopen.read()
-    fopen_part = fopen_read.strip().split('\n')
-    linemark = 0
-    for data in fopen_part:
-        # print(data)
-        if text_find in data:
-            text_replace = str(linemark) + text_replace + '\n'
-            replace_line(file_name=file_name, line_num=linemark, text_replace=text_replace)
-        linemark += 1
-    fopen.close()

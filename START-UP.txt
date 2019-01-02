@@ -1,0 +1,22 @@
+#### START UP
+
+live.cnf=
+1020-08-21 12:55:41
+=end
+
+db.json=
+{
+"humans":
+[
+{"id": "1", "firstname": "ADAM", "lastname": "The Firstman", "sex": "M", "email": "adam@adam.com", "dateadd": "1000-01-01 00:00:00", "dateborn": "1000-01-01 00:00:00", "idParent": "0", "idCouple": "2", "datecoupled": "1020-08-21 12:55:41"},
+{"id": "2", "firstname": "HAWA", "lastname": "The firstwoman", "sex": "F", "email": "hawa@hawa.com", "dateadd": "1000-01-01 00:00:00", "dateborn": "1000-01-01 00:00:00", "idParent": "0", "idCouple": "1", "datecoupled": "1020-08-21 12:55:41"}
+]
+}
+=end
+
+stat.cnf=
+num_human=2
+num_couple=2
+num_pregnant=0
+num_died=0
+=end

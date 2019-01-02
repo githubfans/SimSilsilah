@@ -1,12 +1,13 @@
 ---config
 liveison=1;
-simulation_maxnumhuman=412000;
+simulation_maxnumhuman=4400;
 
 3600 = 1 hour
-3600x168 = 1 weeks
+3600x24 = 1 day
 86400 = 1 day
-simulation_mintimeadd=3600x24;
-simulation_maxtimeadd=86400x10;
+86400x7 = 1 week
+simulation_mintimeadd=86400x7;
+simulation_maxtimeadd=86400x30;
 
 simulation_speed=1; ... 1 == sleep(1)
 simulation_limit_couple=50;
