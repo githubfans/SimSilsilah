@@ -44,7 +44,15 @@ try:
                 print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
                 data = SetDied(sess=session, getdata=data)
                 print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
+                print('NEXT >>>> update_humans <<<<<<<<<<<<<<<<<')
+                # if "'isPregnant': '1'" in str(data):
+                #     exit(str(data))
                 update_humans(json_=data)
+                f = open('db.json', 'r')
+                fread = f.read()
+                f.close()
+                if "'isPregnant': '1'" in str(fread):
+                    exit(str(fread))
 
             stopt = time.time()
             fwaktu_proses = waktu_proses(int(stopt) - int(startt))
