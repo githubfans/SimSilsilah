@@ -14,7 +14,7 @@ session = sess_code()
 try:
     while True:
         maxnumhuman = GetConfig('simulation_maxnumhuman')
-        numhuman = LastID()
+        numhuman = int(stats(var='num_human'))
         if numhuman <= maxnumhuman:
             startt = time.time()
             if sys.argv[1] == 'restart':
@@ -33,26 +33,26 @@ try:
                 fread = fread.encode('utf-8')
                 data = json.loads(fread)
                 f.close()
-                print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
+                # print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
                 data = SetCouple(sess=session, getdata=data)
-                print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
+                # print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
                 data = SetPregnant(sess=session, getdata=data)
-                print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
+                # print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
                 data = SetGivingBirth(sess=session, getdata=data)
-                print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
+                # print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
                 data = SetMenopause(sess=session, getdata=data)
-                print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
+                # print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
                 data = SetDied(sess=session, getdata=data)
-                print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
+                # print('\n*********\ngetdata = \n' + str(data) + '\n**********\n\n')
                 print('NEXT >>>> update_humans <<<<<<<<<<<<<<<<<')
                 # if "'isPregnant': '1'" in str(data):
                 #     exit(str(data))
                 update_humans(json_=data)
-                f = open('db.json', 'r')
-                fread = f.read()
-                f.close()
-                if "'isPregnant': '1'" in str(fread):
-                    exit(str(fread))
+                # f = open('db.json', 'r')
+                # fread = f.read()
+                # f.close()
+                # if "'isPregnant': '1'" in str(fread):
+                #     exit(str(fread))
 
             stopt = time.time()
             fwaktu_proses = waktu_proses(int(stopt) - int(startt))

@@ -369,12 +369,12 @@ def GenHuman(limit=100, parent=''):
     # db = Database()
 
     numhuman = stats(var='num_human')
-    print('numhuman = ' + str(numhuman))
+    # print('numhuman = ' + str(numhuman))
     if numhuman == 0:
         parent = '0'
         limit = 2
 
-    print('limit = ' + str(limit))
+    # print('limit = ' + str(limit))
     # generate Human
     num_generating = 0
     if limit > 1:
@@ -387,11 +387,10 @@ def GenHuman(limit=100, parent=''):
                 num_generating += 1
                 queryes = generate_json_human(queryes, parent, currdatetime)
         queryx = ',\n' . join(queryes)
-        print('306:num_generating = ' + str(num_generating))
         if num_generating > 0:
             optimizedb()
             numberOfLine_InFile = numberOfLineInFile('db.json')
-            print('before insert :' + str(numberOfLine_InFile))
+            # print('before insert :' + str(numberOfLine_InFile))
             try:
                 # queryx = queryx.exncode('utf-8')
                 to_line = numberOfLine_InFile - 2
@@ -401,7 +400,7 @@ def GenHuman(limit=100, parent=''):
                 InsertDataToDB('db.json', insert_to_line=to_line, text=text_to_insert)
                 optimizedb()
                 numberOfLine_InFile = numberOfLineInFile('db.json')
-                print('after insert :' + str(numberOfLine_InFile))
+                # print('after insert :' + str(numberOfLine_InFile))
                 last_numhuman = int(numhuman) + int(num_generating)
                 real_numhuman = numHuman()
                 if real_numhuman != last_numhuman:
@@ -411,12 +410,12 @@ def GenHuman(limit=100, parent=''):
                 #     findID_updateKey(file_name='db.json', find_id='c86bb95295a4d42f4913eb8f4eeffdb3', key='idCouple', key_new_value='xxx')
             except IndexError:
                 print('Error while write.....')
-            print('414:num_generating = ' + str(num_generating))
+            # print('414:num_generating = ' + str(num_generating))
             try:
-                print('416:num_generating = ' + str(num_generating))
+                # print('416:num_generating = ' + str(num_generating))
                 return int(num_generating)
             except IndexError:
-                print('419:num_generating = ' + str(num_generating))
+                # print('419:num_generating = ' + str(num_generating))
                 num_generating = 0
                 return int(num_generating)
 
@@ -469,7 +468,7 @@ def SetCouple(sess, getdata=''):
     hit = 0
     real_numcoupled = numCoupled()
     stat_numcoupled = int(get_stat(var='num_couple'))
-    random_number_of_humans_tocouple = random.randint(10, 20)
+    # random_number_of_humans_tocouple = random.randint(10, 20)
     temp_data = {}
     currdatetimexx = GetLive()
     print('currdatetime = ' + str(currdatetimexx))
@@ -488,7 +487,7 @@ def SetCouple(sess, getdata=''):
                 currdatetime = GetLive()
                 age = math.floor(get_age(currdatetime, data['dateborn'], return_days=False))
                 agecoupledx1 = int(agecoupledx.strip().split(',')[0])
-                agecoupledx2 = int(agecoupledx.strip().split(',')[1])
+                # agecoupledx2 = int(agecoupledx.strip().split(',')[1])
                 if (agecoupledx1 + 3) == int(age):
                     print(data['firstname'] + ' [' + data['sex'] + '] : ' + str(age))
                 if agecoupledx1 <= int(age):
@@ -509,7 +508,7 @@ def SetCouple(sess, getdata=''):
                                     insert_data_in_use(sess=this_function_name, id=choose_couple['id'])
                                 returnIndexOrder = findId_returnIndexOrder(find_id=choose_couple['id'])
                                 index_num = int(returnIndexOrder.strip().split('|')[0])
-                                line_num = int(returnIndexOrder.strip().split('|')[1])
+                                # line_num = int(returnIndexOrder.strip().split('|')[1])
 
                                 # human ke-1
                                 temp_data['humans'][hit]['idCouple'] = choose_couple['id']
@@ -530,12 +529,9 @@ def SetCouple(sess, getdata=''):
     stopt = time.time()
     fwaktu_proses = waktu_proses(int(stopt) - int(startt))
     if generate > 0:
-        # print('\n\n' + str(temp_data))
         if getdata == '':
             update_humans(json_=temp_data)
             empty_data_in_use(sess=this_function_name)
-        # exit('selesai------------')
-        # print(real_numcoupled, '|', stat_numcoupled)
         real_numcoupled = numCoupled()
         if stat_numcoupled != real_numcoupled:
             print('real !')
@@ -546,7 +542,6 @@ def SetCouple(sess, getdata=''):
         find_replace_line(file_name='stat.cnf', text_find='num_couple=', text_replace='num_couple=' + str(tot_num_couple))
         print('**COUPLED** >> {0} couples in {1}' . format(generate, fwaktu_proses))
         print('{0} couples generated' . format(tot_num_couple))
-        # print(jloads)
     else:
         temp_data = jloads
     return temp_data
@@ -554,16 +549,13 @@ def SetCouple(sess, getdata=''):
 
 def set_pregnant(sess, temp_data, hit, id, currdatetime, generate, getdata):
 
-    getornot = random.randint(0, 0)
+    getornot = random.randint(0, 3)
     if getornot == 0:
         try:
-            # if getdata == '':
-            #     insert_data_in_use(sess=sess, id=id)
             temp_data['humans'][hit]['isPregnant'] = '1'
             temp_data['humans'][hit]['datepregnant'] = currdatetime
 
             if temp_data['humans'][hit]['isPregnant'] == '1':
-                print('\n======================\nset_pregnant() ========================= \n' + str(temp_data['humans'][hit]))
                 generate += 1
 
         except IndexError:
@@ -587,80 +579,56 @@ def SetPregnant(sess, getdata=''):
     generate = 0
     hit = 0
     real_numPregnant = numPregnant()
-    stat_numPregnant = int(get_stat(var='num_pregnant'))
+    # stat_numPregnant = int(get_stat(var='num_pregnant'))
     temp_data = {}
     currdatetimexx = GetLive()
     print('currdatetime = ' + str(currdatetimexx))
     for data in jloads['humans']:
-        # print(data)
         if temp_data == {}:
             temp_data = jloads
             data = temp_data['humans'][hit]
         else:
             pass
         sdata = str(data)
-        # print(sdata)
         if cek_in_use(id=data['id']) is False:
-            # print('not in use : ' + data['id'])
-            # print('SetPregnant ================================ ' + sdata)
-            if (data['sex'] == 'F' or "'sex': 'F'" in sdata) and ("'isPregnant': '0'" in sdata or "'isPregnant'" not in sdata) and "'datecoupled':" in sdata:
-                print('SetPregnant == if sex = F ================================ ' + sdata)
+            if \
+                (data['sex'] == 'F' or "'sex': 'F'" in sdata) and \
+                    ("'isPregnant': '0'" in sdata or "'isPregnant'" not in sdata) and \
+                    "'datecoupled':" in sdata:
                 currdatetime = GetLive()
                 days_after_givingbirth = 0
                 days_after_coupled = get_age(currdatetime, data['datecoupled'], return_days=True)
                 if "dategivingbirth" in sdata:
                     days_after_givingbirth = get_age(currdatetime, data['dategivingbirth'], return_days=True)
-                    print('AGE days_after_givingbirth' + str(days_after_givingbirth))
 
                 pregnant_days_after_birth = GetConfig('pregnant_aftergbirth')
                 pregnant_days_after_coupled = GetConfig('pregnant')
-                print('pregnant_days_after_birth >> ' + pregnant_days_after_birth)
-                print('pregnant_days_after_coupled >> ' + pregnant_days_after_coupled)
                 if days_after_givingbirth > 0:
-                    print('pregnant_days_after_birth = ' + str(pregnant_days_after_birth))
                     pregnant_days_after_birth_1 = math.floor(int(pregnant_days_after_birth.strip().split(',')[0]))
-                    # print('pregnant_days_after_birth_1 = ' + str(pregnant_days_after_birth_1))
                     # pregnant_days_after_birth_2 = math.floor(int(pregnant_days_after_birth.strip().split(',')[1]))
-                    # print('pregnant_days_after_birth_2 = ' + str(pregnant_days_after_birth_2))
                     if pregnant_days_after_birth_1 <= int(days_after_givingbirth):
                         # <= pregnant_days_after_birth_2:
                         generate += set_pregnant(this_function_name, temp_data, hit, data['id'], currdatetime, generate, getdata)
 
                 elif days_after_coupled > 0:
-                    print('GetConfig pregnant_days_after_coupled = ' + str(pregnant_days_after_coupled))
                     pregnant_days_after_coupled_1 = math.floor(int(pregnant_days_after_coupled.strip().split(',')[0]))
-                    # print('pregnant_days_after_coupled_1 = ' + str(pregnant_days_after_coupled_1))
                     # pregnant_days_after_coupled_2 = math.floor(int(pregnant_days_after_coupled.strip().split(',')[1]))
-                    # print('pregnant_days_after_coupled_2 = ' + str(pregnant_days_after_coupled_2))
-                    print('days_after_coupled = ' + str(days_after_coupled))
                     if pregnant_days_after_coupled_1 <= int(days_after_coupled):
                         # <= pregnant_days_after_coupled_2:
                         generate += set_pregnant(this_function_name, temp_data, hit, data['id'], currdatetime, generate, getdata)
-            # exit('test 1 data....')
+                time.sleep(0)
         hit += 1
     stopt = time.time()
     fwaktu_proses = waktu_proses(int(stopt) - int(startt))
-    # print('\n\n' + str(temp_data))
-    # exit('TEST AJA--------------')
     if generate > 0:
-        print('\nif generate > 0:\n' + str(temp_data))
         if getdata == '':
             update_humans(json_=temp_data)
             empty_data_in_use(sess=this_function_name)
-        # exit('selesai------------')
-        # print(real_numPregnant, '|', stat_numPregnant)
         real_numPregnant = numPregnant()
-        if stat_numPregnant != real_numPregnant:
-            print('real !')
-            tot_num_pregnant = real_numPregnant + generate
-        else:
-            print('stat !')
-            tot_num_pregnant = stat_numPregnant + generate
+        tot_num_pregnant = real_numPregnant + generate
         find_replace_line(file_name='stat.cnf', text_find='num_pregnant=', text_replace='num_pregnant=' + str(tot_num_pregnant))
         print('**pregnant** >> {0} pregnant in {1}' . format(generate, fwaktu_proses))
         print('{0} pregnant generated' . format(tot_num_pregnant))
-        # print(jloads)
-        # exit(temp_data)
     else:
         temp_data = jloads
     return temp_data
@@ -704,15 +672,15 @@ def SetGivingBirth(sess, getdata=''):
         if cek_in_use(id=data['id']) is False:
             # print(sdata)
             if "'isPregnant': '1'" in sdata and "'datedied'" not in sdata:
-                print(sdata)
+                # print(sdata)
                 currdatetime = GetLive()
                 # print('currdatetime = ' + currdatetime)
                 days_after_pregnant = get_age(currdatetime, data['datepregnant'], return_days=True)
-                print('days_after_pregnant = ' + str(days_after_pregnant))
+                # print('days_after_pregnant = ' + str(days_after_pregnant))
                 GetConfig_givingbirth = GetConfig('givingbirth')
                 # print('GetConfig_givingbirth = ' + str(GetConfig_givingbirth))
                 GetConfig_givingbirth_1 = int(GetConfig_givingbirth.strip().split(',')[0])
-                GetConfig_givingbirth_2 = int(GetConfig_givingbirth.strip().split(',')[1])
+                # GetConfig_givingbirth_2 = int(GetConfig_givingbirth.strip().split(',')[1])
                 if GetConfig_givingbirth_1 <= int(days_after_pregnant):
                     # <= GetConfig_givingbirth_2:
                     try:
@@ -720,7 +688,7 @@ def SetGivingBirth(sess, getdata=''):
                             if getdata == '':
                                 insert_data_in_use(sess=this_function_name, id=data['id'])
                             temp_data['humans'][hit]['dategivingbirth'] = currdatetime
-                            temp_data['humans'][hit]['isPregnant'] = ''
+                            temp_data['humans'][hit]['isPregnant'] = '0'
                             temp_data['humans'][hit]['datepregnant'] = ''
                             parent = '{0}|{1}' . format(temp_data['humans'][hit]['idCouple'], temp_data['humans'][hit]['id'])
                             # print('parent = ' + parent)
@@ -732,11 +700,12 @@ def SetGivingBirth(sess, getdata=''):
                                 limit = random.randint(2, 5)
                             elif stat_numHuman >= 10000:
                                 limit = random.randint(1, 4)
-                            print('stat_numHuman = ' + str(stat_numHuman))
-                            print('limit = ' + str(limit))
+                            # print('stat_numHuman = ' + str(stat_numHuman))
+                            # print('limit = ' + str(limit))
                             if limit > 0:
+                                update_humans(json_=temp_data)
                                 GenHuman_res = GenHuman(limit=limit, parent=parent)
-                                print('GenHuman_res = ' + str(GenHuman_res))
+                                # print('GenHuman_res = ' + str(GenHuman_res))
                                 num_generating += GenHuman_res
                         else:
                             print('Error: PARENT empty.... set_givingbirth > try')
@@ -745,15 +714,15 @@ def SetGivingBirth(sess, getdata=''):
                         print('Error.... set_givingbirth > try')
                 # exit('test 1 data....')
         hit += 1
-    print('num data hit = ' + str(hit))
+    # print('num data hit = ' + str(hit))
     # data_append = ',\n' . join(data_gen)
     stopt = time.time()
     fwaktu_proses = waktu_proses(int(stopt) - int(startt))
 
     if GenHuman_res > 0:
-        print('\n\nafter ' + this_function_name + ' === \n' + str(temp_data))
-    # exit('TEST AJA--------------')
-    # if num_generating > 0:
+        # print('\n\nafter ' + this_function_name + ' === \n' + str(temp_data))
+        # exit('TEST AJA--------------')
+        # if num_generating > 0:
         # exit('\n\n' + str(temp_data))
         # update_humans(json_=temp_data)
         if getdata == '':
@@ -792,7 +761,7 @@ def SetMenopause(sess, getdata=''):
     temp_data = {}
     stat_numHuman = int(get_stat(var='num_human'))
     maxnum = 10000
-    num_generating = 0
+    # num_generating = 0
     currdatetimexx = GetLive()
     print('currdatetime = ' + str(currdatetimexx))
     for data in jloads['humans']:
@@ -809,7 +778,7 @@ def SetMenopause(sess, getdata=''):
                 age = get_age(currdatetime, data['dateborn'], return_days=False)
                 GetConfig_agemenopause = GetConfig('agemenopause')
                 GetConfig_agemenopause_1 = int(GetConfig_agemenopause.strip().split(',')[0])
-                GetConfig_agemenopause_2 = int(GetConfig_agemenopause.strip().split(',')[1])
+                # GetConfig_agemenopause_2 = int(GetConfig_agemenopause.strip().split(',')[1])
                 if GetConfig_agemenopause_1 <= int(age):
                     # <= GetConfig_agemenopause_2:
                     try:
@@ -868,7 +837,7 @@ def SetDied(sess, getdata=''):
     generate = 0
     hit = 0
     temp_data = {}
-    num_generating = 0
+    # num_generating = 0
     currdatetimexx = GetLive()
     print('currdatetime = ' + str(currdatetimexx))
     for data in jloads['humans']:
@@ -877,14 +846,14 @@ def SetDied(sess, getdata=''):
             data = temp_data['humans'][hit]
         else:
             pass
-        sdata = str(data)
+        # sdata = str(data)
         if cek_in_use(id=data['id']) is False:
             currdatetime = GetLive()
             # print('currdatetime = ' + str(currdatetime))
             age = get_age(currdatetime, data['dateborn'], return_days=False)
             GetConfig_agedied = GetConfig('agedied')
             GetConfig_agedied_1 = int(GetConfig_agedied.strip().split(',')[0])
-            GetConfig_agedied_2 = int(GetConfig_agedied.strip().split(',')[1])
+            # GetConfig_agedied_2 = int(GetConfig_agedied.strip().split(',')[1])
             # if GetConfig_agedied_1 <= int(age) <= GetConfig_agedied_2:
             if GetConfig_agedied_1 <= int(age):
                 try:
@@ -1107,21 +1076,6 @@ def is_file_not_in_use(file_name):
         return False
 
 
-def LockFile(file_name):
-    lock = LockFile(file_name)
-    lock.acquire()
-
-
-def UnLockFile(file_name):
-    lock = LockFile(file_name)
-    lock.release()
-
-
-def LockFile_status(file_name):
-    lock = LockFile(file_name)
-    lock.is_locked()
-
-
 def replace_line(file_name, line_num, text):
     lines = open(file_name, 'r').readlines()
     lines[line_num] = text
@@ -1237,16 +1191,15 @@ def InsertDataToDB(filedb, insert_to_line, text):
     else:
         print('InsertDataToDB error !!')
     f.close()
-    f2 = open(filedb, "r")
-    contents2 = f2.read()
+    # f2 = open(filedb, "r")
+    # contents2 = f2.read()
     # print('contents 2 = ' + contents2)
-    f2.close()
+    # f2.close()
     # time.sleep(1)
 
 
 def insert_data_in_use(sess, id):
     # time.sleep(1)
-    time.sleep(1)
     f = open("inuse/" + sess + ".data", 'a')
     with open("inuse/" + sess + ".data", 'a') as outfile:
             outfile.write(id + "\n")
@@ -1373,5 +1326,5 @@ def optimizedb():
     f = open('db.json', 'w')
     f.write(fread)
     f.close()
-    time.sleep(1)
+    # time.sleep(1)
     return True

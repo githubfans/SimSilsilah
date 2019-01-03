@@ -1,6 +1,6 @@
 ---config
 liveison=1;
-simulation_maxnumhuman=4400;
+simulation_maxnumhuman=3000;
 
 3600 = 1 hour
 3600x24 = 1 day
