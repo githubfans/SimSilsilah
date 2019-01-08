@@ -16,7 +16,12 @@ db.json=
 
 stat.cnf=
 num_human=2
-num_couple=2
+num_human_life=2
+num_coupleless_male=0
+num_coupleless_female=0
+num_couple=1
+num_couple_female_nomenopause=0
 num_pregnant=0
+num_menopause=0
 num_died=0
 =end
