@@ -1,4 +1,9 @@
-num_human=2
-num_couple=2
-num_pregnant=1
-num_died=0
+num_human=45278
+num_human_life=36981
+num_coupleless_male=2222
+num_coupleless_female=2338
+num_couple=40718
+num_couple_female_nomenopause=12062
+num_pregnant=0
+num_menopause=0
+num_died=8297
